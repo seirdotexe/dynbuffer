@@ -1,0 +1,20 @@
+{
+  "name": "@seirdotexe/dynbuffer",
+  "version": "1.0.0",
+  "description": "A wrapper to act as a dynamically resizing buffer utilizing ArrayBuffer and DataView.",
+  "private": true,
+  "type": "module",
+  "main": "./index.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": "^22 || ^24"
+  },
+  "dependencies": {},
+  "homepage": "https://github.com/seirdotexe/dynbuffer",
+  "repository": "github:seirdotexe/dynbuffer",
+  "keywords": [],
+  "author": "seirdotexe",
+  "license": "BSD-3-Clause"
+}
