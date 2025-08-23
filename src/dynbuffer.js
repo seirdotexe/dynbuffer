@@ -1,3 +1,6 @@
+/**
+ * @module DynBuffer
+ */
 export class DynBuffer {
   /**
    * Initialize a new dataview with the recommended max byte length
@@ -22,7 +25,7 @@ export class DynBuffer {
   }
 
   /**
-   * Returns the number of bytes of data available for reading from the current position in the buffer to the end of the buffer
+   * Returns the number of bytes available from the current position in the buffer
    * @returns {number}
    */
   get bytesAvailable() {
@@ -53,8 +56,12 @@ export class DynBuffer {
     return this.#position;
   }
 
-  // Todo: JSdoc
 
+  /**
+   * Ensures there's enough capacity to write X amount of bytes to the buffer, and if not, it'll resize the buffer appropriately
+   * @private
+   * @param {number} bytes - The initial amount of bytes needed to be written
+   */
   #ensureCapacity(bytes) {
     if (this.bytesAvailable < bytes) {
       const newLength = (this.#dataview.byteLength + (bytes - this.bytesAvailable));
@@ -63,14 +70,21 @@ export class DynBuffer {
     }
   }
 
-
+  /**
+   * A simple wrapper around executing functions on the DataView class
+   * @private
+   * @param {string} func - The function name to execute
+   * @param {number} bytes - The amount of bytes to ensure capacity and increment the position with
+   * @param {number} [value] - The value to write to the buffer
+   * @returns {number|undefined} When reading, a value is returned
+   */
   #executeCall(func, bytes, value) {
     // Todo: Endian
-    if (arguments.length === 3) {
+    if (arguments.length === 3) { // Write
       this.#ensureCapacity(bytes);
       this.#dataview[func](this.#position, value);
       this.#position += bytes;
-    } else {
+    } else { // Read
       const value = this.#dataview[func](this.#position);
 
       this.#position += bytes;
