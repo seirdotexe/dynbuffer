@@ -131,4 +131,36 @@ export class DynBuffer {
       return value;
     }
   }
+
+  /**
+   * Writes a signed byte
+   * @param {number} value - The signed byte to write to the buffer
+   */
+  writeByte(value) {
+    this.#executeCall('setInt8', 1, value);
+  }
+
+  /**
+   * Reads a signed byte
+   * @returns {number} The signed byte
+   */
+  readByte() {
+    return this.#executeCall('getInt8', 1);
+  }
+
+  /**
+   * Writes an unsigned byte
+   * @param {number} value - The unsigned byte to write to the buffer
+   */
+  writeUnsignedByte(value) {
+    this.#executeCall('setUint8', 1, value);
+  }
+
+  /**
+   * Reads an unsigned byte
+   * @returns {number} The unsigned byte
+   */
+  readUnsignedByte() {
+    return this.#executeCall('getUint8', 1);
+  }
 }
