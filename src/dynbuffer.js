@@ -15,6 +15,13 @@ export class DynBuffer {
    * @type {number}
    */
   #position;
+  /**
+   * The byte order
+   * @private
+   * @type {0|1}
+   * @default 0 - Defaults to 0 for big endian
+   */
+  #endian;
 
   /**
    * Creates a new DynBuffer
@@ -22,6 +29,7 @@ export class DynBuffer {
   constructor() {
     this.#dataview = new DataView(new ArrayBuffer(0, { maxByteLength: 2 ** 30 }));
     this.#position = 0;
+    this.#endian = 0;
   }
 
   /**
@@ -74,6 +82,22 @@ export class DynBuffer {
   }
 
   /**
+   * Returns the byte order
+   * @returns {0|1}
+   */
+  get endian() {
+    return this.#endian;
+  }
+
+  /**
+   * Sets the byte order
+   * @param {0|1} value - The endianness to set the byte order to, either 0 for big endian, or 1 for little endian
+   */
+  set endian(value) {
+    this.#endian = value;
+  }
+
+  /**
    * Ensures there's enough capacity to write X amount of bytes to the buffer, and if not, it'll resize the buffer appropriately
    * @private
    * @param {number} bytes - The initial amount of bytes needed to be written
@@ -95,13 +119,12 @@ export class DynBuffer {
    * @returns {number|undefined} When reading, a value is returned
    */
   #executeCall(func, bytes, value) {
-    // Todo: Endian
     if (arguments.length === 3) { // Write
       this.#ensureCapacity(bytes);
-      this.#dataview[func](this.#position, value);
+      this.#dataview[func](this.#position, value, this.#endian);
       this.#position += bytes;
     } else { // Read
-      const value = this.#dataview[func](this.#position);
+      const value = this.#dataview[func](this.#position, this.#endian);
 
       this.#position += bytes;
 
