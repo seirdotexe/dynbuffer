@@ -65,6 +65,13 @@ export class DynBuffer {
     return this.#position;
   }
 
+  /**
+   * Sets the current position in the buffer
+   * @param {number} value - The value to set the position to
+   */
+  set position(value) {
+    this.#position = value;
+  }
 
   /**
    * Ensures there's enough capacity to write X amount of bytes to the buffer, and if not, it'll resize the buffer appropriately
