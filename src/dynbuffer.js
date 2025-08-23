@@ -49,6 +49,15 @@ export class DynBuffer {
   }
 
   /**
+   * Sets the length of the buffer
+   * @param {number} value - The length to set the buffer to
+   */
+  set length(value) {
+    // Todo - If the length is set to a value that is larger than the current length, the right side of the buffer is filled with zeros
+    // Todo - If the length is set to a value that is smaller than the current length, the buffer is truncated
+  }
+
+  /**
    * Returns the current position in the buffer
    * @returns {number}
    */
