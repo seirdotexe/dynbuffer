@@ -7,7 +7,7 @@ export class DynBuffer {
   /**
    * Initialize a new stream utilizing Buffer and ArrayBuffer with the recommended max byte length
    * @private
-   * @type {Buffer<ArrayBufferLike>}
+   * @type {Buffer}
    * @see https://tc39.es/ecma262/multipage/structured-data.html#sec-resizable-arraybuffer-guidelines
    */
   #stream;
@@ -44,7 +44,7 @@ export class DynBuffer {
 
   /**
    * Returns the whole buffer
-   * @returns {Buffer<ArrayBufferLike>}
+   * @returns {Buffer}
    */
   get stream() {
     return this.#stream;
