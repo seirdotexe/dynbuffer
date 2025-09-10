@@ -179,8 +179,25 @@ export class DynBuffer {
     return this.#executeCall('readUInt8', 1);
   }
 
-  writeBytes(bytes, position = 0, length = 0) { /** Todo */ }
-  readBytes(bytes, position = 0, length = 0) { /** Todo */ }
+  /**
+   * Writes a sequence of 'length' bytes from the specified buffer, 'bytes', starting 'position' (zero-based index) bytes
+   * @param {DynBuffer|Buffer} bytes - The DynBuffer/Buffer to write the bytes from, into the buffer
+   * @param {number} [position=0] - A zero-based index indicating the position into the array to begin writing
+   * @param {number} [length=0] - An unsigned integer indicating how far into the buffer to write
+   */
+  writeBytes(bytes, position = 0, length = 0) {
+  }
+
+  /**
+   * Reads the number of data bytes, specified by the 'length' parameter, from the buffer
+   * The bytes are read into the DynBuffer object specified by the 'bytes' parameter
+   * The bytes are written into the destination DynBuffer starting at the position specified by 'position'
+   * @param {DynBuffer} bytes - The DynBuffer to read data into
+   * @param {number} [position=0] - The position at which the read data should be written
+   * @param {number} [length=0] - The number of bytes to read
+   */
+  readBytes(bytes, position = 0, length = 0) {
+  }
 
   /**
    * Writes a boolean based value
