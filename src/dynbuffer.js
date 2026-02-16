@@ -201,6 +201,26 @@ export class DynBuffer {
    * @param {number} [length=0] - An unsigned integer indicating how far into the buffer to write
    */
   writeBytes(bytes, position = 0, length = 0) {
+    // Simple but convenient support for Buffer, needed internally for 'writeMultiByte'
+    if (Buffer.isBuffer(bytes)) {
+      bytes = { stream: bytes };
+    }
+
+    if (length === 0) {
+      length = (bytes.length - position);
+    }
+
+    if (position > bytes.length) {
+      position = bytes.length;
+    }
+
+    this.#ensureCapacity(length);
+
+    for (let i = 0; i < length; i++) {
+      this.#stream[i + this.#position] = bytes.stream[i + position];
+    }
+
+    this.#position += length;
   }
 
   /**
@@ -212,6 +232,19 @@ export class DynBuffer {
    * @param {number} [length=0] - The number of bytes to read
    */
   readBytes(bytes, position = 0, length = 0) {
+    if (length === 0) {
+      length = this.bytesAvailable;
+    }
+
+    if ((position + length) >= bytes.length) {
+      bytes.#ensureCapacity(position + length);
+    }
+
+    for (let i = 0; i < length; i++) {
+      bytes.stream[i + position] = this.#stream[i + this.#position];
+    }
+
+    this.#position += length;
   }
 
   /**
