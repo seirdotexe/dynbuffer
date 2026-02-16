@@ -63,10 +63,13 @@ export class DynBuffer {
    * @param {number} value - The length to set the buffer to
    */
   set length(value) {
-    if (value > this.#stream.length) {
-      // Todo - Larger than the current length, the right side of the buffer is filled with zeros
-    } else {
-      // Todo - Smaller than the current length, the buffer is truncated
+    if (value > this.#stream.length) { //? Larger than the current length
+      const toFill = (value - this.#stream.length);
+
+      this.#ensureCapacity(toFill); //? The right side of the buffer is filled with zeros
+    } else { //? Smaller than the current length
+      this.#stream = this.#stream.subarray(0, value); //? The buffer is truncated
+      this.#position = this.length;
     }
   }
 
