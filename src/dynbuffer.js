@@ -369,6 +369,7 @@ export class DynBuffer {
 
     const encoded = iconv.encode(value, charSet, { addBOM: false });
 
+    // Support for 'writeUTF' to write its length
     if (source) {
       this.writeUnsignedShort(encoded.length);
     }
