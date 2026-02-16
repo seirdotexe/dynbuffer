@@ -63,13 +63,17 @@ export class DynBuffer {
    * @param {number} value - The length to set the buffer to
    */
   set length(value) {
-    if (value > this.#stream.length) { // Larger than the current length, the right side of the buffer is filled with zeros
+    if (value === 0) {
+      this.#stream = Buffer.from(new ArrayBuffer(0, { maxByteLength: 2 ** 30 }));
+      this.#position = 0;
+    } else if (value > this.#stream.length) { // Larger than the current length, the right side of the buffer is filled with zeros
       const toFill = (value - this.#stream.length);
 
       this.#ensureCapacity(toFill);
     } else { // Smaller than the current length, the buffer is truncated
       this.#stream = this.#stream.subarray(0, value);
-      this.#position = this.length;
+      this.#stream.buffer.resize(value);
+      this.#position = value;
     }
   }
 
@@ -155,7 +159,6 @@ export class DynBuffer {
    * Clears the contents of the buffer and resets the position to 0
    */
   clear() {
-    this.#position = 0;
     this.length = 0;
   }
 
