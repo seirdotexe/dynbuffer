@@ -63,12 +63,12 @@ export class DynBuffer {
    * @param {number} value - The length to set the buffer to
    */
   set length(value) {
-    if (value > this.#stream.length) { //? Larger than the current length
+    if (value > this.#stream.length) { // Larger than the current length, the right side of the buffer is filled with zeros
       const toFill = (value - this.#stream.length);
 
-      this.#ensureCapacity(toFill); //? The right side of the buffer is filled with zeros
-    } else { //? Smaller than the current length
-      this.#stream = this.#stream.subarray(0, value); //? The buffer is truncated
+      this.#ensureCapacity(toFill);
+    } else { // Smaller than the current length, the buffer is truncated
+      this.#stream = this.#stream.subarray(0, value);
       this.#position = this.length;
     }
   }
@@ -140,6 +140,15 @@ export class DynBuffer {
 
       return value;
     }
+  }
+
+  /**
+   * Converts the buffer to string
+   * @param {string} [encoding=utf8] - The encoding set to encode the buffer to
+   * @returns {string} The buffer represented as a string
+   */
+  toString(encoding = 'utf8') {
+    return this.#stream.toString(encoding);
   }
 
   /**
