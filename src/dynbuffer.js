@@ -196,14 +196,14 @@ export class DynBuffer {
 
   /**
    * Writes a sequence of 'length' bytes from the specified buffer, 'bytes', starting 'position' (zero-based index) bytes
-   * @param {DynBuffer|Buffer} bytes - The DynBuffer/Buffer to write the bytes from, into the buffer
+   * @param {DynBuffer} bytes - The DynBuffer to write the bytes from, and into the buffer
    * @param {number} [position=0] - A zero-based index indicating the position into the array to begin writing
    * @param {number} [length=0] - An unsigned integer indicating how far into the buffer to write
    */
   writeBytes(bytes, position = 0, length = 0) {
-    // Simple but convenient support for Buffer, needed internally for 'writeMultiByte'
+    // Internal support for 'writeMultiByte' to write itself
     if (Buffer.isBuffer(bytes)) {
-      bytes = { stream: bytes };
+      bytes = { stream: bytes, length: bytes.length };
     }
 
     if (length === 0) {
@@ -405,7 +405,7 @@ export class DynBuffer {
 
     const encoded = iconv.encode(value, charSet, { addBOM: false });
 
-    // Support for 'writeUTF' to write its length
+    // Internal support for 'writeUTF' to write its length
     if (source) {
       this.writeUnsignedShort(encoded.length);
     }
