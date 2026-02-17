@@ -148,10 +148,15 @@ export class DynBuffer {
 
   /**
    * Converts the buffer to string
-   * @param {string} [encoding=utf8] - The encoding set to encode the buffer to
+   * @param {'ascii'|'utf8'|'utf16le'|'ucs2'|'base64'|'base64url'|'latin1'|'binary'|'hex'} [encoding=utf8] - The encoding set to encode the buffer to
+   * @param {boolean} [prettyHex=false] - When using hex for encoding, define if the hex string is pretty (with spacing and formatted) or not
    * @returns {string} The buffer represented as a string
    */
-  toString(encoding = 'utf8') {
+  toString(encoding = 'utf8', prettyHex = false) {
+    if (encoding === 'hex' && prettyHex) {
+      return this.#stream.toString('hex').match(/.{1,2}/g)?.join(' ');
+    }
+
     return this.#stream.toString(encoding);
   }
 
