@@ -35,6 +35,23 @@ export class DynBuffer {
   }
 
   /**
+   * Overwrite for inspecting on the DynBuffer class
+   * @param {number} depth
+   * @param {import('util').InspectOptionsStylized} options
+   * @param {typeof import('util').inspect} inspect
+   * @returns {string}
+   */
+  [Symbol.for('nodejs.util.inspect.custom')](depth, options, inspect) {
+    return `${options.stylize('DynBuffer', 'special')} {
+      \r  stream: ${inspect(this.#stream, options)},
+      \r  position: ${options.stylize(this.#position, 'number')},
+      \r  length: ${options.stylize(this.length, 'number')},
+      \r  bytesAvailable: ${options.stylize(this.bytesAvailable, 'number')},
+      \r  endian: '${options.stylize(this.#endian, 'string')}'
+    \r}`;
+  }
+
+  /**
    * Returns the number of bytes available from the current position in the buffer
    * @returns {number}
    */
