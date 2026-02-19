@@ -18,6 +18,8 @@ dyn.position = 0;
 dyn.readByte(); // 100
 dyn.readUTF(); // Hello world
 dyn.readBoolean(); // false
+
+dyn.toString('hex', true); // 64 00 0b 48 65 6c 6c 6f 20 77 6f 72 6c 64 00
 ```
 
 # License
