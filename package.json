@@ -12,7 +12,7 @@
     "node": "^24"
   },
   "dependencies": {
-    "iconv-lite": "^0.7.0"
+    "iconv-lite": "^0.7.2"
   },
   "homepage": "https://github.com/seirdotexe/dynbuffer",
   "repository": "github:seirdotexe/dynbuffer",
