@@ -473,6 +473,7 @@ export class DynBuffer {
 
   /**
    * Writes a multibyte string using the specified character set
+   * @see https://github.com/pillarjs/iconv-lite/wiki/Supported-Encodings
    * @param {string} value - The multibyte string to write to the buffer
    * @param {string} [charSet=utf8] - The character set to encode the value with
    * @param {boolean} [source=false] - An internal parameter used for writeUTF to write the length of the string
@@ -495,6 +496,7 @@ export class DynBuffer {
 
   /**
    * Reads a multibyte string of specified length from the buffer using the specified character set
+   * @see https://github.com/pillarjs/iconv-lite/wiki/Supported-Encodings
    * @param {number} length - The number of bytes to read
    * @param {string} [charSet=utf8] - The character set to decode the value to
    * @returns {string} The multibyte string
