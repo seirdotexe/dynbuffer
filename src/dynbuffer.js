@@ -1,4 +1,18 @@
 import iconv from 'iconv-lite';
+import { promisify } from 'node:util';
+import zlib from 'node:zlib';
+
+const deflate = promisify(zlib.deflate);
+const inflate = promisify(zlib.inflate);
+
+const deflateRaw = promisify(zlib.deflateRaw);
+const inflateRaw = promisify(zlib.inflateRaw);
+
+const gzip = promisify(zlib.gzip);
+const gunzip = promisify(zlib.gunzip);
+
+const brotliCompress = promisify(zlib.brotliCompress);
+const brotliDecompress = promisify(zlib.brotliDecompress);
 
 /**
  * @module DynBuffer
@@ -182,6 +196,50 @@ export class DynBuffer {
    */
   clear() {
     this.length = 0;
+  }
+
+  /**
+   * Compresses the buffer
+   * @param {'zlib'|'deflate'|'gzip'|'brotli'} [algorithm=zlib] - The algorithm to compress the buffer with
+   * @throws {ReferenceError} The value must be a valid compression algorithm
+   */
+  async compress(algorithm = 'zlib') {
+    if (this.length === 0) return; // Don't try to compress when there's nothing to compress
+
+    const bytes = (algorithm === 'zlib') ? await deflate(this.#stream, { level: zlib.constants.Z_BEST_COMPRESSION }) :
+      (algorithm === 'deflate') ? await deflateRaw(this.#stream) :
+        (algorithm === 'gzip') ? await gzip(this.#stream) :
+          (algorithm === 'brotli') ? await brotliCompress(this.#stream) : undefined;
+
+    if (!bytes) {
+      throw new ReferenceError('Invalid compression algorithm.');
+    }
+
+    this.position = 0; // The position has to be set to 0 so that we can start writing the compressed bytes to the beginning
+    this.writeBytes(bytes);
+  }
+
+  /**
+   * Decompresses the buffer
+   * @param {'zlib'|'deflate'|'gzip'|'brotli'} [algorithm=zlib] - The algorithm to decompress the buffer with
+   * @throws {ReferenceError} The value must be a valid compression algorithm
+   */
+  async uncompress(algorithm = 'zlib') {
+    if (this.length === 0) return; // Don't try to uncompress when there's nothing to uncompress
+
+    const bytes = (algorithm === 'zlib') ? await inflate(this.#stream, { level: zlib.constants.Z_BEST_COMPRESSION }) :
+      (algorithm === 'deflate') ? await inflateRaw(this.#stream) :
+        (algorithm === 'gzip') ? await gunzip(this.#stream) :
+          (algorithm === 'brotli') ? await brotliDecompress(this.#stream) : undefined;
+
+    if (!bytes) {
+      throw new ReferenceError('Invalid compression algorithm.');
+    }
+
+    this.length = bytes.length; // Resize the buffer to the needed length of uncompressed data
+    this.position = 0; // The position has to be set to 0 so that we can start writing the uncompressed bytes to the beginning
+    this.writeBytes(bytes);
+    this.position = 0; // Reset the position back to 0 so that the program can immediately start reading from the beginning
   }
 
   /**
