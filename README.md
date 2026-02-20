@@ -1,6 +1,6 @@
 # dynbuffer
 
-DynBuffer is a library to easily manipulate bytes. It auto positions for you and expands the buffer by itself under the hood. It's made for developers who write back-end code and need direct byte manipulation without all the hassle!
+DynBuffer is a library to easily manipulate bytes. It auto positions for you and expands the buffer by itself. It's made for developers who write back-end code and need direct byte manipulation without all the hassle!
 
 # Example
 
