@@ -286,19 +286,16 @@ export class DynBuffer {
 
   /**
    * Writes a sequence of 'length' bytes from the specified buffer, 'bytes', starting 'position' (zero-based index) bytes
-   * @param {DynBuffer} bytes - The DynBuffer to write the bytes from, and into the buffer
+   * @param {DynBuffer|Buffer} bytes - The DynBuffer (or Buffer) to write the bytes from, and into the buffer
    * @param {number} [position=0] - A zero-based index indicating the position into the array to begin writing
    * @param {number} [length=0] - An unsigned integer indicating how far into the buffer to write
    */
   writeBytes(bytes, position = 0, length = 0) {
-    // Internal support for 'writeMultiByte' to write itself
     if (Buffer.isBuffer(bytes)) {
       bytes = { stream: bytes, length: bytes.length };
     }
 
-    if (length === 0) {
-      length = (bytes.length - position);
-    }
+    length = (length === 0) ? (bytes.length - position) : length;
 
     if (position > bytes.length) {
       position = bytes.length;
@@ -320,10 +317,13 @@ export class DynBuffer {
    * @param {DynBuffer} bytes - The DynBuffer to read data into
    * @param {number} [position=0] - The position at which the read data should be written
    * @param {number} [length=0] - The number of bytes to read
+   * @throws {RangeError} If the given length is greater than the amount of bytes available
    */
   readBytes(bytes, position = 0, length = 0) {
-    if (length === 0) {
-      length = this.bytesAvailable;
+    length = (length === 0) ? this.bytesAvailable : length;
+
+    if (length > this.bytesAvailable) {
+      throw new RangeError('End of buffer was encountered.');
     }
 
     if ((position + length) >= bytes.length) {
