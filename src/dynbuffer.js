@@ -156,25 +156,43 @@ export class DynBuffer {
   /**
    * A simple wrapper around executing functions on the Buffer class
    * @private
-   * @param {string} func - The function name to execute
+   * @param {string} method - The function name to execute
    * @param {number} bytes - The amount of bytes to ensure capacity and increment the position with
    * @param {number} [value] - The value to write to the buffer
    * @returns {number|undefined} When reading, a value is returned
+   * @throws {RangeError} When reading, there must be sufficient data available to read
    */
-  #executeCall(func, bytes, value) {
-    func = (bytes === 1) ? func : `${func}${this.#endian}`;
+  #executeCall(method, bytes, value) {
+    method = (bytes === 1) ? method : `${method}${this.#endian}`; // Methods with 1 byte have no endianness
 
-    if (arguments.length === 3) { // Write
+    if (arguments.length === 3) { // Write when 'value' argument is present
       this.#ensureCapacity(bytes);
-      this.#stream[func](value, this.#position);
+      this.#stream[method](value, this.#position);
       this.#position += bytes;
     } else { // Read
-      const value = this.#stream[func](this.#position);
+      if (this.bytesAvailable === 0) {
+        throw new RangeError('There is not sufficient data available to read.');
+      }
+
+      const value = this.#stream[method](this.#position);
 
       this.#position += bytes;
 
       return value;
     }
+  }
+
+  /**
+   * Converts an unsigned integer as a signed integer with the given bit width (two's complement)
+   * @private
+   * @param {number} value - The unsigned integer value to sign
+   * @param {number} bits - The number of bits the value should be treated as
+   * @returns {number} The signed integer representation of the value
+   */
+  #signedOverflow(value, bits) {
+    const sign = 1 << (bits - 1);
+
+    return (value & (sign - 1)) - (value & sign);
   }
 
   /**
@@ -243,11 +261,11 @@ export class DynBuffer {
   }
 
   /**
-   * Writes a signed byte
-   * @param {number} value - The signed byte to write to the buffer
+   * Writes a byte
+   * @param {number} value - The byte to write to the buffer
    */
   writeByte(value) {
-    this.#executeCall('writeInt8', 1, value);
+    this.#executeCall('writeInt8', 1, this.#signedOverflow(value, 8));
   }
 
   /**
@@ -256,14 +274,6 @@ export class DynBuffer {
    */
   readByte() {
     return this.#executeCall('readInt8', 1);
-  }
-
-  /**
-   * Writes an unsigned byte
-   * @param {number} value - The unsigned byte to write to the buffer
-   */
-  writeUnsignedByte(value) {
-    this.#executeCall('writeUInt8', 1, value);
   }
 
   /**
@@ -344,64 +354,56 @@ export class DynBuffer {
   }
 
   /**
-   * Writes a signed short
-   * @param {number} value - The signed short to write to the buffer
+   * Writes a 16-bit integer
+   * @param {number} value - The 16-bit integer to write to the buffer
    */
   writeShort(value) {
-    this.#executeCall('writeInt16', 2, value);
+    this.#executeCall('writeInt16', 2, this.#signedOverflow(value, 16));
   }
 
   /**
-   * Reads a signed short from the buffer
-   * @returns {number} The signed short
+   * Reads a signed 16-bit integer from the buffer
+   * @returns {number} The signed 16-bit integer
    */
   readShort() {
     return this.#executeCall('readInt16', 2);
   }
 
   /**
-   * Writes an unsigned short
-   * @param {number} value - The unsigned short to write to the buffer
-   */
-  writeUnsignedShort(value) {
-    this.#executeCall('writeUInt16', 2, value);
-  }
-
-  /**
-   * Reads an unsigned short from the buffer
-   * @returns {number} The unsigned short
+   * Reads an unsigned 16-bit integer from the buffer
+   * @returns {number} The unsigned 16-bit integer
    */
   readUnsignedShort() {
     return this.#executeCall('readUInt16', 2);
   }
 
   /**
-   * Writes a signed int
-   * @param {number} value - The signed int to write to the buffer
+   * Writes a 32-bit signed integer
+   * @param {number} value - The 32-bit signed integer to write to the buffer
    */
   writeInt(value) {
     this.#executeCall('writeInt32', 4, value);
   }
 
   /**
-   * Reads a signed int from the buffer
-   * @returns {number} The signed int
+   * Reads a signed 32-bit integer from the buffer
+   * @returns {number} The signed 32-bit integer
    */
   readInt() {
     return this.#executeCall('readInt32', 4);
   }
 
   /**
-   * Writes an unsigned int
-   * @param {number} value - The unsigned int to write to the buffer
+   * Writes an unsigned 32-bit integer
+   * @param {number} value - The unsigned 32-bit integer to write to the buffer
    */
   writeUnsignedInt(value) {
     this.#executeCall('writeUInt32', 4, value);
   }
 
   /**
-   * Reads an unsigned int from the buffer
-   * @returns {number} The unsigned int
+   * Reads an unsigned 32-bit integer from the buffer
+   * @returns {number} The unsigned 32-bit integer
    */
   readUnsignedInt() {
     return this.#executeCall('readUInt32', 4);
@@ -488,7 +490,7 @@ export class DynBuffer {
 
     // Internal support for 'writeUTF' to write its length
     if (source) {
-      this.writeUnsignedShort(encoded.length);
+      this.writeShort(encoded.length);
     }
 
     this.writeBytes(encoded, 0, encoded.length);
