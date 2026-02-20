@@ -1,8 +1,10 @@
 # dynbuffer
 
-A wrapper to act as a dynamically resizing buffer utilizing ArrayBuffer and Buffer.
+DynBuffer is a library to easily manipulate bytes, that auto positions and expands itself under the hood. It's made for developers who write back-end code and need direct byte manipulation without all the hassle!
 
 # Example
+
+The entire class is well documented and is accessible [here](https://seirdotexe.github.io/dynbuffer-api/).
 
 ```js
 import DynBuffer from '@seirdotexe/dynbuffer';

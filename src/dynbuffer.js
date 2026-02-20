@@ -15,7 +15,8 @@ const brotliCompress = promisify(zlib.brotliCompress);
 const brotliDecompress = promisify(zlib.brotliDecompress);
 
 /**
- * @module DynBuffer
+ * @author SeirDotExe
+ * @license BSD-3-Clause
  */
 export class DynBuffer {
   /**
@@ -50,10 +51,10 @@ export class DynBuffer {
 
   /**
    * Overwrite for inspecting on the DynBuffer class
-   * @param {number} depth
-   * @param {import('util').InspectOptionsStylized} options
-   * @param {typeof import('util').inspect} inspect
-   * @returns {string}
+   * @param {number} depth - The 'depth' param of util.inspect
+   * @param {Object} options - The util.InspectOptionsStylized options
+   * @param {Function} inspect - The util.inspect function
+   * @returns {string} A pretty printed representation of the DynBuffer class
    */
   [Symbol.for('nodejs.util.inspect.custom')](depth, options, inspect) {
     return `${options.stylize('DynBuffer', 'special')} {
@@ -216,6 +217,7 @@ export class DynBuffer {
 
   /**
    * Compresses the buffer
+   * @async
    * @param {'zlib'|'deflate'|'gzip'|'brotli'} [algorithm=zlib] - The algorithm to compress the buffer with
    * @throws {ReferenceError} The value must be a valid compression algorithm
    */
@@ -237,6 +239,7 @@ export class DynBuffer {
 
   /**
    * Decompresses the buffer
+   * @async
    * @param {'zlib'|'deflate'|'gzip'|'brotli'} [algorithm=zlib] - The algorithm to decompress the buffer with
    * @throws {ReferenceError} The value must be a valid compression algorithm
    */
