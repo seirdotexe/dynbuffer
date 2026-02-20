@@ -290,7 +290,7 @@ export class DynBuffer {
    * @throws {RangeError} If the given length is greater than the remaining space in the destination buffer
    */
   writeBytes(bytes, position = 0, length = 0) {
-    if (Buffer.isBuffer(bytes)) {
+    if (!bytes?.stream && Buffer.isBuffer(bytes)) {
       bytes = { stream: bytes, length: bytes.length };
     }
 
