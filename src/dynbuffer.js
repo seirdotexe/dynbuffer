@@ -230,7 +230,7 @@ export class DynBuffer {
           (algorithm === 'brotli') ? await brotliCompress(this.#stream) : undefined;
 
     if (!bytes) {
-      throw new ReferenceError('Invalid compression algorithm.');
+      throw new ReferenceError(`Invalid compression algorithm '${algorithm}' for compress.`);
     }
 
     this.position = 0; // The position has to be set to 0 so that we can start writing the compressed bytes to the beginning
@@ -251,7 +251,7 @@ export class DynBuffer {
           (algorithm === 'brotli') ? await brotliDecompress(this.#stream) : undefined;
 
     if (!bytes) {
-      throw new ReferenceError('Invalid compression algorithm.');
+      throw new ReferenceError(`Invalid compression algorithm '${algorithm}' for uncompress.`);
     }
 
     this.length = bytes.length; // Resize the buffer to the needed length of uncompressed data
@@ -483,7 +483,7 @@ export class DynBuffer {
    */
   writeMultiByte(value, charSet = 'utf8', source = false) {
     if (!iconv.encodingExists(charSet)) {
-      throw new Error('Invalid encoding for writeMultiByte.');
+      throw new Error(`Invalid encoding '${charSet}' for writeMultiByte.`);
     }
 
     const encoded = iconv.encode(value, charSet, { addBOM: false });
@@ -506,7 +506,7 @@ export class DynBuffer {
    */
   readMultiByte(length, charSet = 'utf8') {
     if (!iconv.encodingExists(charSet)) {
-      throw new Error('Invalid encoding for readMultiByte.');
+      throw new Error(`Invalid encoding '${charSet}' for readMultiByte.`);
     }
 
     const buffer = this.#stream.subarray(this.#position, this.#position + length);
