@@ -287,23 +287,23 @@ export class DynBuffer {
    * @param {DynBuffer|Buffer} bytes - The DynBuffer (or Buffer) to write the bytes from, and into the buffer
    * @param {number} [position=0] - A zero-based index indicating the position into the array to begin writing
    * @param {number} [length=0] - An unsigned integer indicating how far into the buffer to write
+   * @throws {RangeError} If the given length is greater than the remaining space in the destination buffer
    */
   writeBytes(bytes, position = 0, length = 0) {
     if (Buffer.isBuffer(bytes)) {
       bytes = { stream: bytes, length: bytes.length };
     }
 
+    position = Math.min(position, bytes.length);
     length = (length === 0) ? (bytes.length - position) : length;
 
-    if (position > bytes.length) {
-      position = bytes.length;
+    if (length > (bytes.length - position)) {
+      throw new RangeError('The supplied index is out of bounds.');
     }
 
     this.#ensureCapacity(length);
 
-    for (let i = 0; i < length; i++) {
-      this.#stream[i + this.#position] = bytes.stream[i + position];
-    }
+    bytes.stream.copy(this.#stream, this.#position, position, position + length);
 
     this.#position += length;
   }
@@ -324,13 +324,9 @@ export class DynBuffer {
       throw new RangeError('End of buffer was encountered.');
     }
 
-    if ((position + length) >= bytes.length) {
-      bytes.#ensureCapacity(position + length);
-    }
+    bytes.length = Math.max(bytes.length, position + length);
 
-    for (let i = 0; i < length; i++) {
-      bytes.stream[i + position] = this.#stream[i + this.#position];
-    }
+    this.#stream.copy(bytes.#stream, position, this.#position, length);
 
     this.#position += length;
   }
