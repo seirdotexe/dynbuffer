@@ -329,7 +329,7 @@ export class DynBuffer {
 
     bytes.length = Math.max(bytes.length, position + length);
 
-    this.#stream.copy(bytes.#stream, position, this.#position, length);
+    this.#stream.copy(bytes.stream, position, this.#position, length);
 
     this.#position += length;
   }
