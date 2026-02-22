@@ -189,7 +189,7 @@ export class DynBuffer {
    * @returns {number} The signed integer representation of the value
    */
   #signedOverflow(value, bits) {
-    const sign = 1 << (bits - 1);
+    const sign = (1 << (bits - 1));
 
     return (value & (sign - 1)) - (value & sign);
   }

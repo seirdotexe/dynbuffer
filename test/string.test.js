@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import DynBuffer from '../index.js';
 
-describe('byte test', () => {
+describe('string test', () => {
   it('should support writing and reading a simple string', () => {
     const dynbuf = new DynBuffer();
 
