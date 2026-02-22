@@ -481,6 +481,7 @@ export class DynBuffer {
    * @param {string} [charSet=utf8] - The character set to encode the value with
    * @param {boolean} [source=false] - An internal parameter used for writeUTF to write the length of the string
    * @throws {Error} The character set must exist
+   * @throws {RangeError} The encoded string exceeds the maximum length of uint16 for writeUTF
    */
   writeMultiByte(value, charSet = 'utf8', source = false) {
     if (!iconv.encodingExists(charSet)) {
@@ -491,6 +492,10 @@ export class DynBuffer {
 
     // Internal support for 'writeUTF' to write its length
     if (source) {
+      if (encoded.length > 65535) {
+        throw new RangeError('The supplied index is out of bounds.');
+      }
+
       this.writeShort(encoded.length);
     }
 
