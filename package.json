@@ -10,7 +10,7 @@
     "jsdoc": "jsdoc ./src/dynbuffer.js -d ./dynbuffer-api/"
   },
   "engines": {
-    "node": "^24"
+    "node": "^20"
   },
   "dependencies": {
     "iconv-lite": "^0.7.2"
