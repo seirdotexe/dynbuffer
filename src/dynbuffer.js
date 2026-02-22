@@ -312,8 +312,8 @@ export class DynBuffer {
   }
 
   /**
-   * Reads the number of data bytes, specified by the 'length' parameter, from the buffer
-   * The bytes are read into the DynBuffer object specified by the 'bytes' parameter
+   * Reads the number of data bytes, specified by the 'length' parameter, from the buffer.
+   * The bytes are read into the DynBuffer object specified by the 'bytes' parameter.
    * The bytes are written into the destination DynBuffer starting at the position specified by 'position'
    * @param {DynBuffer} bytes - The DynBuffer to read data into
    * @param {number} [position=0] - The position at which the read data should be written
