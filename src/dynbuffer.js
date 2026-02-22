@@ -339,11 +339,7 @@ export class DynBuffer {
    * @param {boolean|number} value - The boolean based value to write to the buffer
    */
   writeBoolean(value) {
-    if (value instanceof Boolean) {
-      value = value.valueOf();
-    }
-
-    this.writeByte(value ? 1 : 0);
+    this.writeByte(value.valueOf() ? 1 : 0);
   }
 
   /**
