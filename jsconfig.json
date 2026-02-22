@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
-    "target": "ES2024"
+    "module": "esnext",
+    "target": "esnext"
   },
   "exclude": [
-    "node_modules",
-    "**/node_modules/*"
+    "node_modules"
   ]
 }
