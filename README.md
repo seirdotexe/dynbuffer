@@ -1,5 +1,8 @@
 # dynbuffer
 
+[![NPM Version](https://img.shields.io/npm/v/@seirdotexe/dynbuffer)](https://www.npmjs.com/package/@seirdotexe/dynbuffer)
+[![GitHub stars](https://img.shields.io/github/stars/seirdotexe/dynbuffer)](https://github.com/seirdotexe/dynbuffer)
+
 DynBuffer is a library to easily manipulate bytes. It auto positions for you and expands the buffer by itself. It's made for developers who write back-end code and need direct byte manipulation without all the hassle!
 
 # Requirements and installation
