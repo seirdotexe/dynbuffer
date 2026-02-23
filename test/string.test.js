@@ -18,11 +18,11 @@ describe('string test', () => {
     const dynbuf = new DynBuffer();
 
     dynbuf.writeUTF('A'.repeat(65535));
-    assert.throws(() => dynbuf.writeUTF('B'.repeat(65536)))
 
     dynbuf.position = 0;
 
     assert.equal(dynbuf.readUTF(), 'A'.repeat(65535));
+    assert.throws(() => dynbuf.writeUTF('B'.repeat(65536)))
   });
 
   it('should support writing and reading different character sets', () => {
@@ -64,5 +64,23 @@ describe('string test', () => {
     assert.equal(dynbuf.readMultiByte(str8.length * 2, 'utf-16be'), str8);
     assert.equal(dynbuf.readMultiByte(str9.length * 2, 'utf-16le'), str9);
     assert.equal(dynbuf.readMultiByte(str10.length * 2), str10);
+  });
+
+  it('should support writing and reading UTF8 bytes', () => {
+    const dynbuf = new DynBuffer();
+
+    dynbuf.writeUTFBytes('');
+    dynbuf.writeUTF('');
+    dynbuf.writeUTFBytes('😀');
+    dynbuf.writeUTFBytes('Test');
+
+    assert.equal(dynbuf.position, 10);
+    assert.equal(dynbuf.length, 10);
+
+    dynbuf.position = 0;
+
+    assert.equal(dynbuf.readShort(), 0);
+    assert.equal(dynbuf.readUTFBytes(4), '😀');
+    assert.equal(dynbuf.readUTFBytes(4), 'Test');
   });
 });
