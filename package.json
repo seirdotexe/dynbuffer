@@ -1,15 +1,16 @@
 {
   "name": "@seirdotexe/dynbuffer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A wrapper to act as a dynamically resizing buffer utilizing ArrayBuffer and Buffer. Byte manipulation made easy!",
   "type": "module",
+  "types": "./dynbuffer.d.ts",
   "main": "./index.js",
   "scripts": {
     "test": "node --test",
     "jsdoc": "jsdoc ./src/dynbuffer.js -d ./dynbuffer-api/"
   },
   "engines": {
-    "node": "^20"
+    "node": "^24"
   },
   "dependencies": {
     "iconv-lite": "^0.7.2"
