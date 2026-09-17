@@ -95,7 +95,7 @@ export class DynBuffer {
       this.#stream = Buffer.from(new ArrayBuffer(0, { maxByteLength: 2 ** 30 }));
       this.#position = 0;
     } else if (value > this.#stream.length) { // Larger than the current length, the right side of the buffer is filled with zeros
-      this.#ensureCapacity(value - this.#stream.length);
+      this.#ensureCapacity(value - this.#position);
     } else { // Smaller than the current length, the buffer is truncated
       this.#stream = this.#stream.subarray(0, value);
       this.#stream.buffer.resize(value);
