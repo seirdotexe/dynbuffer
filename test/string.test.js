@@ -26,8 +26,6 @@ describe('string test', () => {
   });
 
   it('should support writing and reading different character sets', () => {
-    // Multi byte and character sets in Actionscript 3 is fundamentally flawed and outdated at this age.
-    // No true utf8 but instead windows-1252. We won't pursue this legacy format, and follow iconv-lite standards!
     const dynbuf = new DynBuffer();
 
     const str1 = 'Olá Mundo!';

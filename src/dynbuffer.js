@@ -25,29 +25,25 @@ export class DynBuffer {
    * @type {Buffer}
    * @see https://tc39.es/ecma262/multipage/structured-data.html#sec-resizable-arraybuffer-guidelines
    */
-  #stream;
+  #stream = Buffer.from(new ArrayBuffer(0, { maxByteLength: 2 ** 30 }));
   /**
    * The current position in the buffer
    * @private
    * @type {number}
    */
-  #position;
+  #position = 0;
   /**
    * The byte order
    * @private
    * @type {'BE'|'LE'}
    * @default 'BE' - Defaults to BE for big endian
    */
-  #endian;
+  #endian = 'BE';
 
   /**
    * Creates a new DynBuffer
    */
-  constructor() {
-    this.#stream = Buffer.from(new ArrayBuffer(0, { maxByteLength: 2 ** 30 }));
-    this.#position = 0;
-    this.#endian = 'BE';
-  }
+  constructor() { }
 
   /**
    * Overwrite for inspecting on the DynBuffer class
